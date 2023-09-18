@@ -34,4 +34,6 @@ public class Usuario {
     private List<Orden> ordenes;
 
 
+    public Usuario(int id, String nombre, String username, String email, String direccion, String telefono, String tipo, String password) {
+    }
 }
