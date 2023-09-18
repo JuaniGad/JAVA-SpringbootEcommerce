@@ -3,6 +3,7 @@ package com.curso.ecommerce.springcomemerce.service;
 import com.curso.ecommerce.springcomemerce.model.Producto;
 
 import java.beans.PropertyDescriptor;
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductoService {
@@ -10,4 +11,5 @@ public interface ProductoService {
  public Optional<Producto> get(Integer id);
  public void delete(Integer id);
  public void update(Producto producto);
+ public List<Producto> findAll();
 }
