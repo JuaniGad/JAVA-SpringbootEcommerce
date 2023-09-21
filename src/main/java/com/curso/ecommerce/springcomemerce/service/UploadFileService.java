@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class UploadClassService {
+public class UploadFileService {
 
     private  String folder="images//";
 

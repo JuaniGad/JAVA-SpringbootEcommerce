@@ -3,13 +3,16 @@ package com.curso.ecommerce.springcomemerce.controller;
 import com.curso.ecommerce.springcomemerce.model.Producto;
 import com.curso.ecommerce.springcomemerce.model.Usuario;
 import com.curso.ecommerce.springcomemerce.service.ProductoService;
+import com.curso.ecommerce.springcomemerce.service.UploadFileService;
 import com.curso.ecommerce.springcomemerce.service.UsuarioService;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +24,10 @@ public class ProductoController {
     @Autowired
 
     private ProductoService productoService;
+
+    @Autowired
+    private UploadFileService upload;
+
 
     @Autowired
     private     UsuarioService usuarioService;
@@ -40,10 +47,28 @@ public class ProductoController {
 
 
     @PostMapping("/save")
-    public String save(Producto producto){
+    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
 
     LOGGER.info("Este es el objeto producto {}",producto);
     Optional<Usuario> u=usuarioService.get(3);
+
+
+    //Imagen
+        //Cuando se crea un producto
+        if(producto.getId()==null){
+            String nombreImagen=upload.saveImage(file);
+            producto.setImagen(nombreImagen);
+        }else{
+            if(file.isEmpty()){
+                Producto p=new Producto();
+                p=productoService.get(producto.getId()).get();
+                producto.setImagen(p.getImagen());
+            }else{
+                String nombreImagen=upload.saveImage(file);
+                producto.setImagen(nombreImagen);
+            }
+
+        }
 
         if (u.isPresent()) {
             producto.setUsuario(u.get()); // Obtiene el Usuario del Optional
