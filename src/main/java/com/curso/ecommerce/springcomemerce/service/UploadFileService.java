@@ -25,7 +25,7 @@ public class UploadFileService {
              return file.getOriginalFilename();
         }
 
-        return "default.jpg";
+        return "default.png";
     }
 
     public void deleteImage(String nombre){
