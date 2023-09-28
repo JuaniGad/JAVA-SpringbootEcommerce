@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,5 +77,35 @@ public class HomeController {
 
         return "usuario/carrito" ;
 
+    }
+
+    //Quitar elemento del carrito
+    @GetMapping("/delete/cart/{id}")
+    public String deleteProductCart(@PathVariable  Integer id,Model model){
+        //Lista Nueva de Productos
+        List<DetalleOrden> ordenesNuevas=new ArrayList<DetalleOrden>();
+
+        for (DetalleOrden detalleOrden : detalles){
+
+            if(detalleOrden.getProducto().getId()!=id){
+                ordenesNuevas.add(detalleOrden);
+            }
+        }
+
+        //new list with products
+        detalles=ordenesNuevas;
+
+        double sumaTotal=0;
+
+        sumaTotal = detalles.stream()
+                .mapToDouble(dt -> dt.getTotal()) // Transforma los objetos en valores double
+                .sum(); // Calcula la suma de los valores double
+
+        orden.setTotal(sumaTotal);
+
+        model.addAttribute("cart",detalles);
+        model.addAttribute("orden",orden);
+
+        return "usuario/carrito";
     }
 }
