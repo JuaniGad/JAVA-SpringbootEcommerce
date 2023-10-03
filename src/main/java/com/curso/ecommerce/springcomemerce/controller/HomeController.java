@@ -3,7 +3,9 @@ package com.curso.ecommerce.springcomemerce.controller;
 import com.curso.ecommerce.springcomemerce.model.DetalleOrden;
 import com.curso.ecommerce.springcomemerce.model.Orden;
 import com.curso.ecommerce.springcomemerce.model.Producto;
+import com.curso.ecommerce.springcomemerce.model.Usuario;
 import com.curso.ecommerce.springcomemerce.service.ProductoService;
+import com.curso.ecommerce.springcomemerce.service.UsuarioService;
 import org.apache.coyote.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ public class HomeController {
  List<DetalleOrden> detalles=new ArrayList<DetalleOrden>();
 //Almacena los datos de la orden
  Orden orden=new Orden();
+
+@Autowired
+ private UsuarioService usuarioService;
     @GetMapping("")
     public String home(Model model){
 
@@ -127,5 +132,17 @@ public class HomeController {
 
         return "usuario/carrito";
 
+    }
+
+    @GetMapping("/order")
+    public String order(Model model){
+
+        Optional<Usuario> usuario=usuarioService.get(3);
+
+        model.addAttribute("cart",detalles);
+        model.addAttribute("orden",orden);
+        model.addAttribute("usuario",usuario);
+
+        return "usuario/resumenorden";
     }
 }
